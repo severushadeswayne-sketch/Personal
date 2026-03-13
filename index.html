@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repository HTML Index</title>
+  <title>HTML Directory</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,64 +15,72 @@
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <main class="max-w-4xl mx-auto px-6 py-14">
     <div class="mb-10">
-      <p class="text-sm font-medium tracking-[0.2em] uppercase text-slate-500">Index</p>
-      <h1 class="mt-2 text-3xl md:text-4xl font-semibold text-slate-900">Repository HTML Pages</h1>
+      <p class="text-sm font-medium tracking-[0.2em] uppercase text-slate-500">Directory</p>
+      <h1 class="mt-2 text-3xl md:text-4xl font-semibold text-slate-900">HTML Pages</h1>
       <p class="mt-3 text-slate-600 max-w-2xl">
-        A simple single-page index that lists every HTML file in this repository as a clickable link.
+        A single-page button directory for all HTML files in this repository.
       </p>
     </div>
 
     <section class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
       <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
         <div>
-          <h2 class="text-lg font-semibold text-slate-900">Available Pages</h2>
-          <p class="text-sm text-slate-500">No previews. Just direct links.</p>
+          <h2 class="text-lg font-semibold text-slate-900">Available Files</h2>
+          <p class="text-sm text-slate-500">Direct links only.</p>
         </div>
-        <button id="refreshBtn" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition">Refresh</button>
+        <button
+          id="refreshBtn"
+          class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition"
+        >
+          Refresh
+        </button>
       </div>
 
       <div id="status" class="px-5 py-4 text-sm text-slate-500">Loading HTML files…</div>
-      <div id="fileList" class="p-3 space-y-2"></div>
+      <div id="fileList" class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
   </main>
 
   <script>
-    const owner = "YOUR_GITHUB_USERNAME";
-    const repo = "YOUR_REPOSITORY_NAME";
+    const owner = "severushadeswayne-sketch";
+    const repo = "Personal";
     const branch = "main";
-    const path = ""; // optional subfolder, e.g. "pages"
+    const rootPath = ""; // optional subfolder, e.g. "pages"
 
-    async function fetchRepoHtmlFiles(repoPath = "") {
-      const endpoint = `https://api.github.com/repos/${owner}/${repo}/contents/${repoPath}?ref=${branch}`;
+    async function fetchHtmlFiles(path = "") {
+      const endpoint = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
       const response = await fetch(endpoint);
+
       if (!response.ok) {
         throw new Error(`GitHub API error: ${response.status}`);
       }
+
       const items = await response.json();
-      let htmlFiles = [];
+      let results = [];
 
       for (const item of items) {
         if (item.type === "file" && item.name.endsWith(".html") && item.name.toLowerCase() !== "index.html") {
-          htmlFiles.push({
+          results.push({
             name: item.name,
             path: item.path
           });
         } else if (item.type === "dir") {
-          const nested = await fetchRepoHtmlFiles(item.path);
-          htmlFiles = htmlFiles.concat(nested);
+          const nested = await fetchHtmlFiles(item.path);
+          results = results.concat(nested);
         }
       }
-      return htmlFiles;
+
+      return results;
     }
 
-    function labelFromFileName(fileName) {
+    function prettifyName(fileName) {
       return fileName
         .replace(/\.html$/i, "")
         .replace(/[-_]+/g, " ")
         .replace(/\b\w/g, c => c.toUpperCase());
     }
 
-    function renderFiles(files) {
+    function renderButtons(files) {
       const status = document.getElementById("status");
       const fileList = document.getElementById("fileList");
       fileList.innerHTML = "";
@@ -82,28 +90,24 @@
         return;
       }
 
-      status.textContent = `${files.length} HTML page${files.length === 1 ? "" : "s"} found.`;
+      status.textContent = `${files.length} HTML file${files.length === 1 ? "" : "s"} found.`;
 
       files
         .sort((a, b) => a.path.localeCompare(b.path))
         .forEach(file => {
           const link = document.createElement("a");
           link.href = `./${file.path}`;
-          link.className = "block w-full rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 px-4 py-4 transition";
+          link.className =
+            "block rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 px-4 py-4 transition shadow-sm";
           link.innerHTML = `
-            <div class="flex items-center justify-between gap-4">
-              <div>
-                <div class="font-medium text-slate-900">${labelFromFileName(file.name)}</div>
-                <div class="text-sm text-slate-500 mt-1">${file.path}</div>
-              </div>
-              <div class="text-sm font-medium text-slate-600">Open</div>
-            </div>
+            <div class="font-medium text-slate-900">${prettifyName(file.name)}</div>
+            <div class="text-sm text-slate-500 mt-1">${file.path}</div>
           `;
           fileList.appendChild(link);
         });
     }
 
-    async function loadFiles() {
+    async function loadDirectory() {
       const status = document.getElementById("status");
       const fileList = document.getElementById("fileList");
       status.textContent = "Loading HTML files…";
@@ -111,19 +115,20 @@
 
       try {
         if (owner === "YOUR_GITHUB_USERNAME" || repo === "YOUR_REPOSITORY_NAME") {
-          status.innerHTML = "Update the <code>owner</code> and <code>repo</code> values in the script before using this on GitHub Pages.";
+          status.innerHTML = 'Update <code>owner</code> and <code>repo</code> in the script first.';
           return;
         }
-        const files = await fetchRepoHtmlFiles(path);
-        renderFiles(files);
+
+        const files = await fetchHtmlFiles(rootPath);
+        renderButtons(files);
       } catch (error) {
-        status.textContent = "Unable to load repository files. Check the repository name, branch, and GitHub Pages setup.";
+        status.textContent = "Unable to load repository files. Check the repo name, branch, and Pages setup.";
         console.error(error);
       }
     }
 
-    document.getElementById("refreshBtn").addEventListener("click", loadFiles);
-    loadFiles();
+    document.getElementById("refreshBtn").addEventListener("click", loadDirectory);
+    loadDirectory();
   </script>
 </body>
 </html>
