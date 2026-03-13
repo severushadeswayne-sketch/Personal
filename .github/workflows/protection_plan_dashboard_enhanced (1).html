@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protection Plan | Interactive Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@11.0.3/dist/framer-motion.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f3ee;
+      --paper:#fffdf9;
+      --ink:#1d2433;
+      --muted:#6c7485;
+      --line:#ded6ca;
+      --primary:#8b5cf6;
+      --primary-soft:#efe7ff;
+      --green:#2b8c6d;
+      --gold:#b68839;
+      --rose:#d76a7f;
+      --blue:#4f76b6;
+      --shadow:0 20px 45px rgba(37, 32, 46, 0.08);
+      --radius:24px;
+    }
+    html { scroll-behavior:smooth; }
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(43,140,109,0.08), transparent 24%),
+        linear-gradient(180deg, #f9f6f1 0%, #f6f3ee 100%);
+      color:var(--ink);
+    }
+    .glass{
+      background:rgba(255,253,249,0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border:1px solid rgba(222,214,202,0.8);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:.45rem .75rem;
+      font-size:.8rem;
+      color:var(--muted);
+    }
+    .tab-btn{
+      transition:.25s ease;
+      border:1px solid transparent;
+    }
+    .tab-btn.active{
+      background:#111827;
+      color:#fff;
+      box-shadow:0 10px 20px rgba(17,24,39,.15);
+    }
+    .metric-card{
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .metric-card:hover{ transform: translateY(-4px); box-shadow:0 20px 40px rgba(29,36,51,.08); }
+    .soft-gradient{
+      background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(248,240,255,.95));
+    }
+    .warm-gradient{
+      background:linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,246,232,.96));
+    }
+    .green-gradient{
+      background:linear-gradient(135deg, rgba(255,255,255,.96), rgba(234,249,242,.96));
+    }
+    .section-panel{ display:none; }
+    .section-panel.active{ display:block; }
+    .range-label{font-size:.82rem;color:var(--muted)}
+    .custom-range{
+      appearance:none;
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:linear-gradient(90deg, #ddd6fe, #a78bfa);
+      outline:none;
+    }
+    .custom-range::-webkit-slider-thumb{
+      appearance:none;
+      width:22px;height:22px;border-radius:50%;
+      background:#fff;border:3px solid var(--primary); box-shadow:0 8px 20px rgba(139,92,246,.25); cursor:pointer;
+    }
+    .custom-range::-moz-range-thumb{
+      width:22px;height:22px;border-radius:50%;
+      background:#fff;border:3px solid var(--primary); box-shadow:0 8px 20px rgba(139,92,246,.25); cursor:pointer;
+    }
+    .mini-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+    }
+    .anchor-line{
+      position:relative;
+      height:2px;
+      background:linear-gradient(90deg, rgba(139,92,246,.2), rgba(43,140,109,.3));
+      border-radius:999px;
+    }
+    .flow-node{
+      border-radius:20px;
+      padding:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.8);
+    }
+    .svg-wrap svg text{ font-family:'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
+    <section class="glass px-6 md:px-8 py-8 md:py-10 mb-6 soft-gradient">
+      <div class="flex flex-col lg:flex-row gap-8 lg:items-center lg:justify-between">
+        <div class="max-w-3xl">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="chip">Warm design</span>
+            <span class="chip">Interactive reflection</span>
+            <span class="chip">Grounded, not abstract</span>
+          </div>
+          <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">Protection Plan</h1>
+          <p class="text-slate-600 text-base md:text-lg leading-8">
+            This is not just about <em>what</em> I want to protect you from. It is about <strong>how</strong> I would actually go about doing it — with boundaries, structure, patience, and a life that feels warmer instead of heavier.
+          </p>
+        </div>
+        <div class="glass p-5 md:p-6 max-w-md warm-gradient">
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">Guiding principle</p>
+          <p class="text-slate-800 leading-7 text-[15px]">
+            Protection does not mean control. It means building conditions in which you can remain free, calm, respected, and emotionally uncornered — while knowing I will still show up with steadiness.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass p-4 md:p-5 mb-6">
+      <div id="tabs" class="flex flex-wrap gap-2"></div>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-[1.35fr_0.65fr] gap-6">
+      <div>
+        <div id="panel-spiritual" class="section-panel active"></div>
+        <div id="panel-social" class="section-panel"></div>
+        <div id="panel-financial" class="section-panel"></div>
+        <div id="panel-familial" class="section-panel"></div>
+        <div id="panel-interpersonal" class="section-panel"></div>
+        <div id="panel-internal" class="section-panel"></div>
+        <div id="panel-mental" class="section-panel"></div>
+        <div id="panel-physical" class="section-panel"></div>
+        <div id="panel-closing" class="section-panel"></div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="glass p-5 md:p-6 green-gradient">
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">How I would operate</p>
+          <div class="space-y-3 text-sm text-slate-700 leading-7">
+            <p><strong>1. First:</strong> understand the trigger instead of reacting to the symptom.</p>
+            <p><strong>2. Then:</strong> build a response that gives liberty, not guilt.</p>
+            <p><strong>3. Finally:</strong> keep showing up in the same manner so peace becomes believable.</p>
+          </div>
+        </div>
+
+        <div class="glass p-5 md:p-6">
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-4">Interactive warmth meter</p>
+          <label class="block text-sm text-slate-700 mb-2">How warm should the overall tone feel?</label>
+          <input id="warmthSlider" class="custom-range" type="range" min="1" max="5" value="4" />
+          <div class="flex justify-between mt-2 range-label"><span>Grounded</span><span>Protective</span></div>
+          <div id="warmthPreview" class="mt-4 rounded-2xl p-4 border border-stone-200 bg-stone-50 text-sm leading-7 text-slate-700">
+            Steady, warm, and realistic. Not theatrical. Not cold either.
+          </div>
+        </div>
+
+        <div class="glass p-5 md:p-6 warm-gradient">
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-4">Common response model</p>
+          <div class="space-y-4 text-sm">
+            <div class="flow-node">
+              <div class="font-semibold mb-1">Observe</div>
+              <div class="text-slate-600">What exactly is the fear? Control, abandonment, social pressure, instability, or exhaustion?</div>
+            </div>
+            <div class="flow-node">
+              <div class="font-semibold mb-1">Contain</div>
+              <div class="text-slate-600">Reduce the heat around it. No pushing. No guilt. No making the fear bigger than it already feels.</div>
+            </div>
+            <div class="flow-node">
+              <div class="font-semibold mb-1">Respond</div>
+              <div class="text-slate-600">Use actions, structure, and predictability so the concern is addressed in practice.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+<script>
+const tabs = [
+  {id:'spiritual', label:'Spiritual'},
+  {id:'social', label:'Social'},
+  {id:'financial', label:'Financial'},
+  {id:'familial', label:'Familial'},
+  {id:'interpersonal', label:'Interpersonal'},
+  {id:'internal', label:'Internal'},
+  {id:'mental', label:'Mental / Emotional'},
+  {id:'physical', label:'Health & Physical'},
+  {id:'closing', label:'Closing'}
+];
+
+const tabBar = document.getElementById('tabs');
+for (const tab of tabs) {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn px-4 py-2.5 rounded-full bg-white text-slate-700 text-sm font-medium';
+  btn.textContent = tab.label;
+  btn.dataset.target = tab.id;
+  if (tab.id === 'spiritual') btn.classList.add('active');
+  btn.onclick = () => activateTab(tab.id, btn);
+  tabBar.appendChild(btn);
+}
+
+function activateTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`panel-${id}`).classList.add('active');
+}
+
+function money(n){ return new Intl.NumberFormat('en-PK', {maximumFractionDigits:0}).format(Math.round(n)); }
+
+function renderSpiritual(){
+  document.getElementById('panel-spiritual').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 soft-gradient">
+      <div class="flex flex-col md:flex-row gap-6 md:items-start md:justify-between mb-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Spiritual protection</p>
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Moving upward together</h2>
+        </div>
+        <div class="chip">Interactive triangle</div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 items-center">
+        <div class="svg-wrap">
+          <div class="mb-4">
+            <label class="block text-sm text-slate-700 mb-2">If one of us moves closer to Allah, how much does that pull both of us upward?</label>
+            <input id="faithSlider" class="custom-range" type="range" min="0" max="100" value="58">
+            <div class="flex justify-between mt-2 range-label"><span>Little movement</span><span>Meaningful pull</span></div>
+          </div>
+          <svg id="faithTriangle" viewBox="0 0 420 340" class="w-full max-w-xl mx-auto">
+            <defs>
+              <linearGradient id="triStroke" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#8b5cf6"/>
+                <stop offset="100%" stop-color="#2b8c6d"/>
+              </linearGradient>
+            </defs>
+            <polygon points="210,30 70,280 350,280" fill="rgba(139,92,246,0.05)" stroke="url(#triStroke)" stroke-width="4" rx="12"></polygon>
+            <circle cx="210" cy="30" r="18" fill="#fff" stroke="#8b5cf6" stroke-width="3"></circle>
+            <text x="210" y="36" text-anchor="middle" font-size="17" font-weight="700" fill="#4c1d95">Allah</text>
+            <circle id="meDot" cx="118" cy="250" r="18" fill="#fff" stroke="#2b8c6d" stroke-width="3"></circle>
+            <text id="meLabel" x="118" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#166534">Me</text>
+            <circle id="herDot" cx="302" cy="250" r="18" fill="#fff" stroke="#b68839" stroke-width="3"></circle>
+            <text id="herLabel" x="302" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#8a611c">You</text>
+            <line id="lineL" x1="210" y1="48" x2="118" y2="250" stroke="#c4b5fd" stroke-width="3" stroke-dasharray="6 5"></line>
+            <line id="lineR" x1="210" y1="48" x2="302" y2="250" stroke="#bbf7d0" stroke-width="3" stroke-dasharray="6 5"></line>
+          </svg>
+        </div>
+        <div>
+          <div class="mini-grid mb-5">
+            <div class="metric-card glass p-4 bg-white/80">
+              <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">How</div>
+              <div class="text-sm text-slate-700 leading-7">By reminding you through words, and just as importantly, through my own practice and discipline.</div>
+            </div>
+            <div class="metric-card glass p-4 bg-white/80">
+              <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Why</div>
+              <div class="text-sm text-slate-700 leading-7">Because faith is protected not only through lectures, but through atmosphere, consistency, and example.</div>
+            </div>
+          </div>
+          <p class="text-[15px] md:text-base leading-8 text-slate-700">
+            I want the better parts of that element in me to contribute positively to your life too. This is one way of protecting your faith in Allah — not by acting like I own that space, but by making sure I add to it rather than disturb it. If one of us genuinely moves upward, the geometry of both our lives changes.
+          </p>
+        </div>
+      </div>
+    </div>`;
+
+  const slider = document.getElementById('faithSlider');
+  const meDot = document.getElementById('meDot');
+  const herDot = document.getElementById('herDot');
+  const meLabel = document.getElementById('meLabel');
+  const herLabel = document.getElementById('herLabel');
+  const lineL = document.getElementById('lineL');
+  const lineR = document.getElementById('lineR');
+  function updateFaith(){
+    const v = +slider.value;
+    const t = v/100;
+    const meX = 118 + (210-118)*t*0.32;
+    const meY = 250 - 110*t;
+    const herX = 302 + (210-302)*t*0.32;
+    const herY = 250 - 110*t;
+    meDot.setAttribute('cx', meX); meDot.setAttribute('cy', meY);
+    meLabel.setAttribute('x', meX); meLabel.setAttribute('y', meY+6);
+    herDot.setAttribute('cx', herX); herDot.setAttribute('cy', herY);
+    herLabel.setAttribute('x', herX); herLabel.setAttribute('y', herY+6);
+    lineL.setAttribute('x2', meX); lineL.setAttribute('y2', meY);
+    lineR.setAttribute('x2', herX); lineR.setAttribute('y2', herY);
+  }
+  slider.addEventListener('input', updateFaith); updateFaith();
+}
+
+function renderSocial(){
+  document.getElementById('panel-social').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 warm-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Social protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Presence, boundaries, and making disrespect uncomfortable</h2>
+      <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Scenario</label>
+          <select id="socialScenario" class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-700">
+            <option value="family">Insensitive family commentary</option>
+            <option value="society">Society pushing for rishta / labels</option>
+            <option value="public">Public disrespect or invasive talk</option>
+          </select>
+          <div class="mt-5 glass p-4 bg-white/80">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">How I address it</div>
+            <div id="socialResponse" class="text-sm leading-7 text-slate-700"></div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="flow-node"><strong>Step 1:</strong> read the room before it escalates.</div>
+          <div class="flow-node"><strong>Step 2:</strong> set respectful boundaries instead of waiting for hurt to pile up.</div>
+          <div class="flow-node"><strong>Step 3:</strong> ensure you do not have to carry the aftertaste of other people’s carelessness alone.</div>
+        </div>
+      </div>
+    </div>`;
+
+  const responses = {
+    family: 'I would respond calmly but clearly. No hostility. Just enough firmness to make it known that your dignity is not available for public handling.',
+    society: 'I would reduce noise, not amplify it. Where needed, I would absorb the social pressure instead of letting it sit on your chest like a burden.',
+    public: 'I would make the environment uncomfortable for disrespect through presence, clarity, and boundaries — not because you cannot speak, but because care should be active.'
+  };
+  const sel = document.getElementById('socialScenario');
+  const out = document.getElementById('socialResponse');
+  const update = ()=> out.textContent = responses[sel.value];
+  sel.addEventListener('change', update); update();
+}
+
+function renderFinancial(){
+  document.getElementById('panel-financial').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 green-gradient">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Financial protection</p>
+          <h2 class="text-2xl md:text-3xl font-bold">Stability that translates into peace</h2>
+        </div>
+        <div class="chip">5-year SIP simulator</div>
+      </div>
+      <div class="grid xl:grid-cols-[0.95fr_1.05fr] gap-8">
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm text-slate-700 mb-2">Monthly investment (PKR)</label>
+            <input id="sipMonthly" type="range" min="10000" max="300000" step="5000" value="75000" class="custom-range">
+            <div class="flex justify-between mt-2 text-sm text-slate-600"><span>10,000</span><span id="sipMonthlyVal">75,000</span><span>300,000</span></div>
+          </div>
+          <div>
+            <label class="block text-sm text-slate-700 mb-2">Expected annual return</label>
+            <input id="sipRate" type="range" min="8" max="20" step="0.5" value="13" class="custom-range">
+            <div class="flex justify-between mt-2 text-sm text-slate-600"><span>8%</span><span id="sipRateVal">13%</span><span>20%</span></div>
+          </div>
+          <div>
+            <label class="block text-sm text-slate-700 mb-2">Lifestyle framing</label>
+            <select id="travelStyle" class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-700">
+              <option value="balanced">Balanced comforts</option>
+              <option value="travel">Travel-leaning</option>
+              <option value="home">Home-and-family leaning</option>
+            </select>
+          </div>
+          <div class="glass p-5 bg-white/80">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">How I address this concern</div>
+            <p class="text-sm text-slate-700 leading-7">Not by saying “it will work out” and leaving it at that. By planning, compounding, and structuring life in a way where peace is not dependent on luck. Stability should be engineered.</p>
+          </div>
+        </div>
+        <div>
+          <div class="mini-grid mb-5">
+            <div class="metric-card glass p-5 bg-white/85"><div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Projected value</div><div id="sipFuture" class="text-2xl font-bold text-slate-900">PKR 0</div></div>
+            <div class="metric-card glass p-5 bg-white/85"><div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Total invested</div><div id="sipInvested" class="text-2xl font-bold text-slate-900">PKR 0</div></div>
+            <div class="metric-card glass p-5 bg-white/85"><div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Estimated gain</div><div id="sipGain" class="text-2xl font-bold text-slate-900">PKR 0</div></div>
+          </div>
+          <div class="glass p-5 bg-white/80 mb-5">
+            <canvas id="sipChart" height="180"></canvas>
+          </div>
+          <div class="glass p-5 bg-white/80">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">What this basket could support in 5 years</div>
+            <div id="sipBasket" class="grid sm:grid-cols-2 gap-3 text-sm text-slate-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  let sipChart;
+  function fv(monthly, annualRate, years){
+    const r = annualRate/100/12;
+    const n = years*12;
+    return monthly * (((Math.pow(1+r,n)-1)/r) * (1+r));
+  }
+  function updateSIP(){
+    const m = +document.getElementById('sipMonthly').value;
+    const rate = +document.getElementById('sipRate').value;
+    const style = document.getElementById('travelStyle').value;
+    const years = 5;
+    document.getElementById('sipMonthlyVal').textContent = money(m);
+    document.getElementById('sipRateVal').textContent = `${rate}%`;
+    const future = fv(m, rate, years);
+    const invested = m*12*years;
+    const gain = future-invested;
+    document.getElementById('sipFuture').textContent = `PKR ${money(future)}`;
+    document.getElementById('sipInvested').textContent = `PKR ${money(invested)}`;
+    document.getElementById('sipGain').textContent = `PKR ${money(gain)}`;
+
+    const tripCopy = future >= 1600000
+      ? 'This pool can realistically support more than 1 international trip alongside other priorities.'
+      : 'This pool can realistically support at least 1 international trip if that is where the priority goes.';
+    const baskets = {
+      balanced:[
+        tripCopy,
+        `A solid emergency cushion of PKR ${money(future*0.22)}`,
+        `Leisure / entertainment basket of PKR ${money(future*0.08)}`,
+        `Home support / family spending flexibility of PKR ${money(future*0.18)}`
+      ],
+      travel:[
+        future >= 2200000
+          ? 'Built with a travel bias: more than 1 international trip remains realistic over time.'
+          : 'Built with a travel bias: 1 international trip remains realistic within the same pool.',
+        `Comfortable stay / ticket buffer within the same savings pool`,
+        `Experience fund of PKR ${money(future*0.08)}`,
+        `Residual savings still above PKR ${money(future*0.32)}`
+      ],
+      home:[
+        `Home setup / separate space reserve of PKR ${money(future*0.24)}`,
+        `Health & parent support basket of PKR ${money(future*0.18)}`,
+        `At least 1 international trip can still be carved out if planned sensibly`,
+        `Emergency reserve of PKR ${money(future*0.25)}`
+      ]
+    };
+    document.getElementById('sipBasket').innerHTML = baskets[style].map(item => `<div class="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3">${item}</div>`).join('');
+
+    const yearly = Array.from({length:5}, (_,i)=> i+1).map(y=>{
+      return Math.round(fv(m, rate, y));
+    });
+    const ctx = document.getElementById('sipChart');
+    if(sipChart) sipChart.destroy();
+    sipChart = new Chart(ctx, {
+      type:'line',
+      data:{
+        labels:['Year 1','Year 2','Year 3','Year 4','Year 5'],
+        datasets:[{
+          data: yearly,
+          tension:0.36,
+          fill:true,
+          borderColor:'#2b8c6d',
+          backgroundColor:'rgba(43,140,109,0.12)',
+          pointRadius:4,
+          pointHoverRadius:5
+        }]
+      },
+      options:{
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:(ctx)=>`PKR ${money(ctx.parsed.y)}`}}},
+        scales:{
+          y:{ticks:{callback:(v)=>`PKR ${money(v)}`}, grid:{color:'rgba(148,163,184,0.15)'}},
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  }
+  ['sipMonthly','sipRate','travelStyle'].forEach(id=> document.getElementById(id).addEventListener('input', updateSIP));
+  document.getElementById('travelStyle').addEventListener('change', updateSIP);
+  updateSIP();
+}
+
+function renderFamilial(){
+  document.getElementById('panel-familial').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 warm-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Familial protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Connected distance, not emotional severance</h2>
+      <div class="grid lg:grid-cols-[0.95fr_1.05fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Living arrangement model</label>
+          <input id="familyDistance" type="range" min="1" max="3" step="1" value="1" class="custom-range">
+          <div class="flex justify-between mt-2 text-sm text-slate-600"><span>Separate portion</span><span>Nearby but distinct</span><span>Abroad + provision</span></div>
+          <div id="familyOutcome" class="mt-5 glass p-5 bg-white/80 text-sm text-slate-700 leading-7"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="flow-node"><strong>What I am solving for:</strong> your peace without making me negligent toward responsibilities.</div>
+          <div class="flow-node"><strong>How:</strong> create enough space for autonomy while keeping the duty structure intact.</div>
+          <div class="flow-node"><strong>Important:</strong> you are not to carry guilt for responsibilities that are mine.</div>
+        </div>
+      </div>
+    </div>`;
+  const out = document.getElementById('familyOutcome');
+  const slider = document.getElementById('familyDistance');
+  function update(){
+    const v = +slider.value;
+    const text = {
+      1:'Minimum structure: a separate portion or clearly demarcated domestic arrangement. This gives breathing room, preserves dignity, and lowers frictions without theatrics.',
+      2:'Intermediate structure: connected but clearly distinct living. Close enough to remain responsible. Distant enough that everyday peace is not negotiated through constant proximity.',
+      3:'Maximum scale: living abroad or in a fully separate setup while continuing to provide for family fully. This is not abandonment. It is a strategic arrangement for peace and responsibility to coexist.'
+    };
+    out.textContent = text[v];
+  }
+  slider.addEventListener('input', update); update();
+}
+
+function renderInterpersonal(){
+  document.getElementById('panel-interpersonal').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 soft-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Interpersonal protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Stress stays separate. Care does not get withdrawn.</h2>
+      <div class="grid xl:grid-cols-[1fr_1fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Stress intensity at work</label>
+          <input id="stressSlider" type="range" min="0" max="100" value="72" class="custom-range">
+          <div class="flex justify-between mt-2 text-sm text-slate-600"><span>Quiet day</span><span>Heavy load</span></div>
+          <div class="mt-5 glass p-5 bg-white/85">
+            <svg id="stressMap" viewBox="0 0 520 280" class="w-full">
+              <defs>
+                <linearGradient id="redFlow" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#fca5a5"/>
+                  <stop offset="100%" stop-color="#fb7185"/>
+                </linearGradient>
+                <linearGradient id="safeFlow" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#bbf7d0"/>
+                  <stop offset="100%" stop-color="#86efac"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="70" rx="24" ry="24" width="150" height="120" fill="#fff" stroke="#fca5a5" stroke-width="3"></rect>
+              <text x="95" y="110" text-anchor="middle" font-size="18" font-weight="700" fill="#9f1239">Work stress</text>
+              <text x="95" y="138" text-anchor="middle" font-size="13" fill="#7c2d12">pressure, deadlines, fatigue</text>
+              <rect x="195" y="70" rx="24" ry="24" width="130" height="120" fill="#fff" stroke="#cbd5e1" stroke-width="3"></rect>
+              <text x="260" y="110" text-anchor="middle" font-size="18" font-weight="700" fill="#334155">Boundary</text>
+              <text x="260" y="138" text-anchor="middle" font-size="13" fill="#64748b">processing, self-regulation</text>
+              <rect x="350" y="40" rx="24" ry="24" width="150" height="90" fill="#fff" stroke="#86efac" stroke-width="3"></rect>
+              <text x="425" y="78" text-anchor="middle" font-size="18" font-weight="700" fill="#166534">Home</text>
+              <text x="425" y="102" text-anchor="middle" font-size="13" fill="#166534">calm is protected</text>
+              <rect x="350" y="150" rx="24" ry="24" width="150" height="90" fill="#fff" stroke="#c4b5fd" stroke-width="3"></rect>
+              <text x="425" y="188" text-anchor="middle" font-size="18" font-weight="700" fill="#5b21b6">You</text>
+              <text x="425" y="212" text-anchor="middle" font-size="13" fill="#5b21b6">care remains available</text>
+              <path id="blockedFlow" d="M170 130 C 180 130, 188 130, 193 130" stroke="url(#redFlow)" stroke-width="10" fill="none" stroke-linecap="round"></path>
+              <path d="M322 100 C 334 95, 338 90, 350 85" stroke="url(#safeFlow)" stroke-width="10" fill="none" stroke-linecap="round"></path>
+              <path d="M322 160 C 334 168, 338 176, 350 185" stroke="#c4b5fd" stroke-width="10" fill="none" stroke-linecap="round"></path>
+              <text id="stressValue" x="95" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#be123c"></text>
+            </svg>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="glass p-5 bg-white/85">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">How I address abandonment fear</div>
+            <p class="text-sm leading-7 text-slate-700">By making it clear in action that disappointment is not the same thing as emotional disappearance. Stress is one lane. Care is another. I do not cross-wire them.</p>
+          </div>
+          <div class="flow-node"><strong>No brunt transfer:</strong> my work stress does not get outsourced onto the people I love.</div>
+          <div class="flow-node"><strong>Repair over rupture:</strong> disagreements are handled with patience and respect so the relationship becomes stronger, not weaker.</div>
+          <div class="flow-node"><strong>Availability:</strong> if someone calls on me, I show up — most of all for the person dearest to me.</div>
+        </div>
+      </div>
+    </div>`;
+
+  const stressSlider = document.getElementById('stressSlider');
+  const stressValue = document.getElementById('stressValue');
+  const blockedFlow = document.getElementById('blockedFlow');
+  function updateStress(){
+    const v = +stressSlider.value;
+    stressValue.textContent = `${v}% load contained here`;
+    blockedFlow.style.opacity = Math.min(1, .25 + v/100);
+    blockedFlow.style.strokeWidth = 5 + v/18;
+  }
+  stressSlider.addEventListener('input', updateStress); updateStress();
+}
+
+function renderInternal(){
+  document.getElementById('panel-internal').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 warm-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Internal protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Watchful, not invasive</h2>
+      <div class="grid lg:grid-cols-[0.95fr_1.05fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Her internal weather</label>
+          <select id="internalState" class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-700">
+            <option value="overwhelmed">Overwhelmed / shutting down</option>
+            <option value="angry">Angry / says she hates me</option>
+            <option value="distant">Distant / does not want overt closeness</option>
+          </select>
+          <div class="mt-5 glass p-5 bg-white/85">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">How I would respond</div>
+            <div id="internalResponse" class="text-sm leading-7 text-slate-700"></div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="flow-node"><strong>Principle:</strong> difficult moments do not erase my duty of care.</div>
+          <div class="flow-node"><strong>Method:</strong> remain near enough to protect, far enough not to suffocate.</div>
+          <div class="flow-node"><strong>Role:</strong> a watchful protector — not someone who demands emotional performance in return.</div>
+        </div>
+      </div>
+    </div>`;
+
+  const copy = {
+    overwhelmed:'I reduce pressure first. No forcing conversation. No making her explain herself under strain. I become steadier, quieter, and more observant until she feels less cornered.',
+    angry:'Even if she says she hates me in that moment, I do not mistake pain for final truth. I stay anchored enough to protect her without arguing with the storm in real time.',
+    distant:'If she does not overtly want me around, I do not turn cold. I respect the distance while remaining dependable in the background.'
+  };
+  const sel = document.getElementById('internalState');
+  const out = document.getElementById('internalResponse');
+  const update = ()=> out.textContent = copy[sel.value];
+  sel.addEventListener('change', update); update();
+}
+
+function renderMental(){
+  document.getElementById('panel-mental').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 soft-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Mental / emotional protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">A place where she can exhale</h2>
+      <div class="grid lg:grid-cols-[1fr_1fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Current emotional temperature</label>
+          <input id="peaceSlider" type="range" min="0" max="100" value="44" class="custom-range">
+          <div class="flex justify-between mt-2 text-sm text-slate-600"><span>Tense</span><span>Calm</span></div>
+          <div class="mt-5 rounded-[28px] border border-stone-200 bg-white p-5">
+            <div class="anchor-line mb-4"></div>
+            <div id="peaceText" class="text-sm leading-7 text-slate-700"></div>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Less uncertainty</div><div class="text-sm text-slate-600">Clear tone. Clear boundaries. No emotional whiplash.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">More predictability</div><div class="text-sm text-slate-600">The nervous system calms when the person beside you is legible.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">No pressure</div><div class="text-sm text-slate-600">Care offered without making her responsible for soothing me back.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Practical calm</div><div class="text-sm text-slate-600">The relationship itself should not become the source of anxiety.</div></div>
+        </div>
+      </div>
+    </div>`;
+  const slider = document.getElementById('peaceSlider');
+  const out = document.getElementById('peaceText');
+  function update(){
+    const v=+slider.value;
+    out.textContent = v < 35
+      ? 'When things are tense, my job is to lower the emotional noise instead of adding to it. I would not use pressure where calm is needed.'
+      : v < 70
+      ? 'This is the middle ground: enough honesty to stay real, enough steadiness to keep the bond from becoming exhausting.'
+      : 'At its best, the relationship becomes a place where she can exhale — not because life has no difficulty, but because home does not feel like another battlefield.';
+  }
+  slider.addEventListener('input', update); update();
+}
+
+function renderPhysical(){
+  document.getElementById('panel-physical').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 green-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Health & physical protection</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Care for everyone in our charge</h2>
+      <div class="grid lg:grid-cols-[0.95fr_1.05fr] gap-8">
+        <div>
+          <label class="block text-sm text-slate-700 mb-2">Focus area</label>
+          <select id="healthFocus" class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-700">
+            <option value="self">My health discipline</option>
+            <option value="shared">Her health & routine support</option>
+            <option value="parents">Parents' health & safety</option>
+            <option value="environment">Healthy environment for all</option>
+          </select>
+          <div class="mt-5 glass p-5 bg-white/85">
+            <div class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">How I would address it</div>
+            <div id="healthResponse" class="text-sm leading-7 text-slate-700"></div>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Glycemic control</div><div class="text-sm text-slate-600">Taking responsibility for my own body and energy.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Workout & food</div><div class="text-sm text-slate-600">Health is built through systems, not moods.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Parents' care</div><div class="text-sm text-slate-600">Protection extends to the people we are responsible toward.</div></div>
+          <div class="metric-card glass p-5 bg-white/85"><div class="font-semibold mb-2">Leader's duty</div><div class="text-sm text-slate-600">Not just to take charge — to take care.</div></div>
+        </div>
+      </div>
+    </div>`;
+  const copy = {
+    self:'I am already working on this through glycemic control, workouts, and eating right. Protection starts with taking responsibility for my own stability instead of expecting others to absorb the cost of my neglect.',
+    shared:'For her, it means making health easier to sustain through routine, encouragement, and an environment where wellbeing is a priority rather than an afterthought.',
+    parents:'This extends to her parents and mine as well. Health safety includes attentiveness, support, and planning for the people we are accountable toward.',
+    environment:'The highest form of physical protection is an environment that supports health for everyone — calmer schedules, cleaner habits, and systems that do not grind people down.'
+  };
+  const sel = document.getElementById('healthFocus');
+  const out = document.getElementById('healthResponse');
+  const update = ()=> out.textContent = copy[sel.value];
+  sel.addEventListener('change', update); update();
+}
+
+function renderClosing(){
+  document.getElementById('panel-closing').innerHTML = `
+    <div class="glass p-6 md:p-8 mb-6 warm-gradient">
+      <p class="text-sm uppercase tracking-[0.2em] text-slate-500 mb-2">Closing thought</p>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Protection with liberty</h2>
+      <div class="space-y-5 text-[15px] md:text-base text-slate-700 leading-8">
+        <p>Protection does not mean limiting you. It means creating conditions in which you remain free — free to grow, free to breathe, free to keep the softer parts of yourself alive without feeling like the world is always coming for them.</p>
+        <p>I am always a friend who cares about you, and you matter to me a great deal. Part of what I want to protect is not just your present self, but that inner child in you that still deserves gentleness, room, and liberation.</p>
+        <p>What sits softly in your hands, I know how to approach with care. That instinct is the same one I carry here: to be gentle with what is precious, to hold space for it without bruising it, and to protect it without ever taking its freedom away.</p>
+        <p>That is the kind of protection I mean — realistic, steady, and warm enough that it feels like peace rather than surveillance.</p>
+      </div>
+    </div>`;
+}
+
+function initWarmth(){
+  const slider = document.getElementById('warmthSlider');
+  const preview = document.getElementById('warmthPreview');
+  const map = {
+    1:'Measured and minimal. Just enough reassurance to stay grounded.',
+    2:'Warm, but restrained. Calm over sentimentality.',
+    3:'Balanced. Honest, gentle, and dependable.',
+    4:'Protective, warm, and clearly caring without becoming dramatic.',
+    5:'Very soft and emotionally enveloping, while still trying to remain real.'
+  };
+  const update = ()=> preview.textContent = map[slider.value];
+  slider.addEventListener('input', update); update();
+}
+
+renderSpiritual();
+renderSocial();
+renderFinancial();
+renderFamilial();
+renderInterpersonal();
+renderInternal();
+renderMental();
+renderPhysical();
+renderClosing();
+initWarmth();
+</script>
+</body>
+</html>
