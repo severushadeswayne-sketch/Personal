@@ -1,262 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="app()" x-init="init()">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Protection Plan</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-body{
-font-family: 'Inter', sans-serif;
-background:#f7f8fb;
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protection Plan — Repository Index</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #6b7280;
+      --line: rgba(17,24,39,.08);
+      --paper: #f7f8fb;
+      --card: rgba(255,255,255,.86);
+      --indigo-soft: rgba(99,102,241,.12);
+      --indigo: #4f46e5;
+      --warm: #fff8ef;
+      --gold: #b88a44;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(99,102,241,.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(251,191,36,.08), transparent 24%),
+        linear-gradient(180deg, #fbfbfe 0%, #f5f7fb 100%);
+      color: var(--ink);
+    }
+    .glass {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.8);
+      box-shadow: 0 14px 40px rgba(17,24,39,.08);
+    }
+    .tab-active {
+      background: linear-gradient(135deg, rgba(79,70,229,.14), rgba(184,138,68,.08));
+      border-color: rgba(79,70,229,.20);
+      color: #1f2937;
+    }
+    .preview-shell {
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(17,24,39,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+    }
+    iframe { background: white; }
+  </style>
 </head>
-
-<body class="text-gray-800">
-
-<!-- Header -->
-<header class="bg-white shadow-sm">
-<div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-<h1 class="text-xl font-semibold text-gray-900">Protection Plan</h1>
-
-<nav class="space-x-6 text-sm text-gray-600">
-<a href="#spiritual" class="hover:text-indigo-600">Spiritual</a>
-<a href="#financial" class="hover:text-indigo-600">Financial</a>
-<a href="#familial" class="hover:text-indigo-600">Familial</a>
-<a href="#interpersonal" class="hover:text-indigo-600">Interpersonal</a>
-<a href="#internal" class="hover:text-indigo-600">Internal</a>
-<a href="#health" class="hover:text-indigo-600">Health</a>
-</nav>
-</div>
-</header>
-
-<!-- Hero -->
-<section class="max-w-5xl mx-auto px-6 py-16 text-center">
-
-<h2 class="text-3xl font-semibold text-gray-900 mb-4">
-A Practical Protection Plan
-</h2>
-
-<p class="text-gray-600 leading-relaxed max-w-2xl mx-auto">
-The idea behind this plan is not control or restriction.
-It is about creating a life environment where you feel secure,
-respected, and free to grow. Protection here means ensuring that
-peace, dignity, and freedom remain intact in every dimension of life.
-</p>
-
-</section>
-
-
-<!-- SPIRITUAL -->
-<section id="spiritual" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Spiritual Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-In the spiritual dimension I see things as a triangle.
-
-At the apex is Allah.
-
-You and I stand at the other two points.
-
-Whenever either of us moves closer to Allah, the geometry of that triangle changes —
-both of us move closer to Him.
-
-Part of protecting your faith means reminding you of Allah through my words
-and through my own practice. Not in a way that pressures you, but in a way
-that keeps the environment around you spiritually supportive.
-
-Faith should feel like grounding, not burden.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- FINANCIAL -->
-<section id="financial" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Financial Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-Peace becomes easier when finances are structured and stable.
-
-Even a disciplined saving approach starting from PKR 10,000 per month
-can grow meaningfully over a five year horizon. When managed properly,
-that type of financial discipline can comfortably support experiences
-that improve quality of life.
-
-Over a five year period, such savings can realistically support
-at least one international trip — sometimes more — along with
-other life experiences such as travel, leisure, and personal growth.
-
-The purpose of financial protection is simple:
-to ensure stability so that money never becomes the source
-of unnecessary stress in life.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- FAMILIAL -->
-<section id="familial" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Familial Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-Families are complex ecosystems.
-
-Protection here means maintaining what I call
-connected distance.
-
-It allows us to respect family responsibilities
-while ensuring that our personal peace and autonomy
-remain protected.
-
-This could mean practical arrangements such as
-living in separate portions, or in some cases even
-living abroad while still fulfilling responsibilities
-towards family.
-
-The goal is balance.
-
-You should never feel guilty for responsibilities
-that belong to me.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- INTERPERSONAL -->
-<section id="interpersonal" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Interpersonal Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-This part governs emotional safety within the relationship.
-
-Work stress and personal battles stay outside the home environment.
-They should never be transferred onto the people I care about.
-
-Disagreements are normal in any meaningful relationship.
-What matters is how they are handled.
-
-My role would always be to ensure that conflicts are handled
-with patience, maturity, and respect — so that the relationship
-becomes stronger instead of weaker.
-
-Disappointment does not erase care.
-
-Difficulty does not mean abandonment.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- INTERNAL -->
-<section id="internal" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Internal Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-Sometimes the hardest battles people fight are internal.
-
-Self-doubt, emotional fatigue, or the pressure of expectations.
-
-Protection here means remaining steady even when those moments appear.
-
-Even when emotions become intense, the underlying support does not disappear.
-
-Sometimes protection is loud.
-
-Sometimes it is quiet presence.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- HEALTH -->
-<section id="health" class="max-w-5xl mx-auto px-6 py-10">
-
-<div class="bg-white rounded-xl shadow-sm p-8">
-
-<h3 class="text-xl font-semibold mb-4">Health & Physical Protection</h3>
-
-<p class="text-gray-600 leading-relaxed">
-
-Health protection applies to everyone in our circle —
-you, your parents, my parents, and myself.
-
-I am already taking responsibility for my own health
-through glycemic control, exercise, and disciplined eating.
-
-The same philosophy applies to creating an environment
-where everyone we care about can remain healthy.
-
-Leadership is not only about directing people.
-
-It is about caring for those entrusted to us.
-
-</p>
-
-</div>
-</section>
-
-
-<!-- Closing -->
-<section class="max-w-5xl mx-auto px-6 py-16 text-center">
-
-<p class="text-gray-600 max-w-3xl mx-auto leading-relaxed">
-
-Protection does not mean limiting you.
-
-It means creating a life where you can grow freely,
-explore who you are, and move toward the life you want —
-while knowing that if the world becomes difficult,
-you are not facing it alone.
-
-I will always be a friend who cares about you deeply.
-
-You matter to me a lot.
-
-And protecting your peace, your dignity,
-and the gentle parts of your spirit
-will always matter to me.
-
-</p>
-
-</section>
-
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <header class="glass rounded-3xl px-6 py-6 sm:px-8 sm:py-7 mb-6">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-gray-600 border border-gray-200/80 mb-4">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Repository HTML index
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">Warm static index for GitHub Pages</h1>
+          <p class="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
+            This page reads HTML files from the repository and creates tabs to open them. It is built to work as a single <code class="text-[0.92em] bg-gray-100 px-1.5 py-0.5 rounded">index.html</code> on GitHub Pages.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-[280px]">
+          <div class="rounded-2xl bg-white/90 border border-gray-200/80 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-[0.16em] text-gray-500">Owner</div>
+            <div class="mt-1 font-medium" x-text="repoMeta.owner || '—'"></div>
+          </div>
+          <div class="rounded-2xl bg-white/90 border border-gray-200/80 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-[0.16em] text-gray-500">Repository</div>
+            <div class="mt-1 font-medium break-all" x-text="repoMeta.repo || '—'"></div>
+          </div>
+          <div class="rounded-2xl bg-white/90 border border-gray-200/80 px-4 py-3">
+            <div class="text-[11px] uppercase tracking-[0.16em] text-gray-500">HTML files</div>
+            <div class="mt-1 font-medium" x-text="filteredFiles.length"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <aside class="xl:col-span-4 2xl:col-span-3">
+        <div class="glass rounded-3xl p-4 sm:p-5 sticky top-6">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div>
+              <h2 class="text-lg font-semibold">Available pages</h2>
+              <p class="text-sm text-gray-500">Tap a tab to preview or open.</p>
+            </div>
+            <button @click="refresh()" class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Refresh</button>
+          </div>
+
+          <div class="mb-4">
+            <label class="text-xs uppercase tracking-[0.14em] text-gray-500">Filter</label>
+            <input x-model="query" type="text" placeholder="Search HTML files..." class="mt-2 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100">
+          </div>
+
+          <template x-if="loading">
+            <div class="space-y-3">
+              <template x-for="i in 5" :key="i">
+                <div class="animate-pulse rounded-2xl border border-gray-200 bg-white px-4 py-4">
+                  <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+                  <div class="h-3 bg-gray-100 rounded w-1/3 mt-3"></div>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <template x-if="!loading && filteredFiles.length === 0">
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white/80 px-4 py-5 text-sm text-gray-600 leading-relaxed">
+              <p class="font-medium text-gray-800 mb-2">No HTML files found.</p>
+              <p>If you are opening this outside GitHub Pages or the GitHub API rate limit is reached, add a manual file list in the <code class="bg-gray-100 px-1 rounded">manualFiles</code> array inside the script.</p>
+            </div>
+          </template>
+
+          <div class="space-y-3 max-h-[65vh] overflow-auto pr-1" x-show="!loading">
+            <template x-for="file in filteredFiles" :key="file.path">
+              <button @click="selectFile(file)" :class="selected && selected.path === file.path ? 'tab-active' : 'bg-white hover:bg-gray-50 border-gray-200'" class="w-full text-left rounded-2xl border px-4 py-4 transition">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <div class="font-medium text-sm sm:text-[15px] text-gray-900 truncate" x-text="file.name"></div>
+                    <div class="text-xs text-gray-500 mt-1 break-all" x-text="file.path"></div>
+                  </div>
+                  <div class="shrink-0 rounded-full bg-indigo-50 text-indigo-700 text-[11px] px-2.5 py-1 border border-indigo-100">HTML</div>
+                </div>
+              </button>
+            </template>
+          </div>
+        </div>
+      </aside>
+
+      <main class="xl:col-span-8 2xl:col-span-9">
+        <div class="glass rounded-3xl p-4 sm:p-5">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+            <div>
+              <h2 class="text-lg font-semibold">Preview</h2>
+              <p class="text-sm text-gray-500">A gentle front door to the rest of the repository.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <a :href="selected ? selected.url : '#'
+" target="_blank" rel="noopener noreferrer" class="rounded-2xl bg-gray-900 text-white px-4 py-2.5 text-sm font-medium hover:bg-black" :class="!selected && 'pointer-events-none opacity-50'">Open page</a>
+              <a :href="repoMeta.repoUrl || '#'
+" target="_blank" rel="noopener noreferrer" class="rounded-2xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50" :class="!repoMeta.repoUrl && 'pointer-events-none opacity-50'">Repository</a>
+            </div>
+          </div>
+
+          <template x-if="error">
+            <div class="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" x-text="error"></div>
+          </template>
+
+          <template x-if="selected">
+            <div>
+              <div class="rounded-2xl border border-gray-200 bg-white px-4 py-4 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.14em] text-gray-500">Now viewing</div>
+                  <div class="font-semibold text-gray-900 mt-1" x-text="selected.name"></div>
+                  <div class="text-sm text-gray-500 mt-1 break-all" x-text="selected.path"></div>
+                </div>
+                <div class="rounded-2xl bg-[var(--warm)] border border-amber-100 px-4 py-3 text-sm text-gray-700 max-w-md">
+                  This index reads the repository tree through the GitHub API, filters HTML files, and turns them into accessible tabs automatically.
+                </div>
+              </div>
+
+              <div class="preview-shell rounded-[28px] p-3 sm:p-4">
+                <div class="rounded-[22px] overflow-hidden border border-gray-200 bg-white">
+                  <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 border-b border-gray-200">
+                    <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+                    <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+                    <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+                    <div class="ml-3 text-xs text-gray-500 truncate" x-text="selected.url"></div>
+                  </div>
+                  <iframe :src="selected.url" class="w-full h-[72vh]" title="HTML preview"></iframe>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="!selected && !loading">
+            <div class="rounded-[28px] border border-dashed border-gray-300 bg-white/80 px-6 py-16 text-center">
+              <div class="mx-auto h-14 w-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 text-xl">⌘</div>
+              <h3 class="mt-4 text-lg font-semibold text-gray-900">Select a page to begin</h3>
+              <p class="mt-2 text-sm text-gray-600 max-w-xl mx-auto">
+                This index is meant to live at the root of your GitHub Pages site and surface the rest of the HTML files in the repository through one calm, navigable interface.
+              </p>
+            </div>
+          </template>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    function app() {
+      return {
+        loading: true,
+        error: '',
+        query: '',
+        files: [],
+        selected: null,
+        repoMeta: {
+          owner: '',
+          repo: '',
+          defaultBranch: '',
+          repoUrl: ''
+        },
+        manualFiles: [
+          // Optional fallback list. Example:
+          // { path: 'protection_plan_dashboard_enhanced.html', name: 'Protection Plan Dashboard', url: './protection_plan_dashboard_enhanced.html' }
+        ],
+        get filteredFiles() {
+          const q = this.query.trim().toLowerCase();
+          const base = this.files.length ? this.files : this.manualFiles;
+          if (!q) return base;
+          return base.filter(f => (f.name + ' ' + f.path).toLowerCase().includes(q));
+        },
+        async init() {
+          await this.loadFiles();
+        },
+        inferRepo() {
+          const host = window.location.hostname;
+          const pathParts = window.location.pathname.split('/').filter(Boolean);
+          let owner = '';
+          let repo = '';
+
+          if (host.endsWith('github.io')) {
+            owner = host.split('.')[0];
+            repo = pathParts[0] || `${owner}.github.io`;
+          }
+
+          return { owner, repo };
+        },
+        buildPageUrl(path) {
+          const origin = window.location.origin;
+          const pathParts = window.location.pathname.split('/').filter(Boolean);
+          const host = window.location.hostname;
+
+          if (host.endsWith('github.io')) {
+            const owner = host.split('.')[0];
+            const repo = pathParts[0] || `${owner}.github.io`;
+            if (repo === `${owner}.github.io`) {
+              return `${origin}/${path}`;
+            }
+            return `${origin}/${repo}/${path}`;
+          }
+
+          return path;
+        },
+        prettifyName(filename) {
+          return filename
+            .replace(/\.html?$/i, '')
+            .replace(/[-_]+/g, ' ')
+            .replace(/\b\w/g, c => c.toUpperCase());
+        },
+        async loadFiles() {
+          this.loading = true;
+          this.error = '';
+          try {
+            const { owner, repo } = this.inferRepo();
+            this.repoMeta.owner = owner;
+            this.repoMeta.repo = repo;
+            this.repoMeta.repoUrl = owner && repo ? `https://github.com/${owner}/${repo}` : '';
+
+            if (!owner || !repo) {
+              throw new Error('Repository could not be inferred automatically from the current URL.');
+            }
+
+            const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+            if (!repoRes.ok) throw new Error('Unable to read repository details from GitHub API.');
+            const repoData = await repoRes.json();
+            this.repoMeta.defaultBranch = repoData.default_branch;
+
+            const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${repoData.default_branch}?recursive=1`);
+            if (!treeRes.ok) throw new Error('Unable to read repository tree from GitHub API.');
+            const treeData = await treeRes.json();
+
+            const htmlFiles = (treeData.tree || [])
+              .filter(item => item.type === 'blob' && /\.html?$/i.test(item.path))
+              .filter(item => !/(^|\/)index\.html?$/i.test(item.path))
+              .map(item => {
+                const name = item.path.split('/').pop();
+                return {
+                  path: item.path,
+                  name: this.prettifyName(name),
+                  url: this.buildPageUrl(item.path)
+                };
+              })
+              .sort((a, b) => a.path.localeCompare(b.path));
+
+            this.files = htmlFiles;
+            if (this.files.length) this.selected = this.files[0];
+            if (!this.files.length && !this.manualFiles.length) {
+              this.error = 'No HTML files were found apart from index.html.';
+            }
+          } catch (e) {
+            this.error = e.message + ' Falling back to manual file list if available.';
+            this.files = [];
+            if (this.manualFiles.length) this.selected = this.manualFiles[0];
+          } finally {
+            this.loading = false;
+          }
+        },
+        selectFile(file) {
+          this.selected = file;
+        },
+        async refresh() {
+          await this.loadFiles();
+        }
+      }
+    }
+  </script>
 </body>
 </html>
