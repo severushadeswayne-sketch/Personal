@@ -1,80 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Protection Plan Index</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<style>
-body{
-font-family: 'Inter', sans-serif;
-background:#f8fafc;
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repository HTML Index</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <main class="max-w-4xl mx-auto px-6 py-14">
+    <div class="mb-10">
+      <p class="text-sm font-medium tracking-[0.2em] uppercase text-slate-500">Index</p>
+      <h1 class="mt-2 text-3xl md:text-4xl font-semibold text-slate-900">Repository HTML Pages</h1>
+      <p class="mt-3 text-slate-600 max-w-2xl">
+        A simple single-page index that lists every HTML file in this repository as a clickable link.
+      </p>
+    </div>
 
-<body class="text-gray-800">
+    <section class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Available Pages</h2>
+          <p class="text-sm text-slate-500">No previews. Just direct links.</p>
+        </div>
+        <button id="refreshBtn" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition">Refresh</button>
+      </div>
 
-<div class="max-w-3xl mx-auto px-6 py-16">
+      <div id="status" class="px-5 py-4 text-sm text-slate-500">Loading HTML files…</div>
+      <div id="fileList" class="p-3 space-y-2"></div>
+    </section>
+  </main>
 
-<h1 class="text-2xl font-semibold mb-6 text-gray-900">
-Protection Plan
-</h1>
+  <script>
+    const owner = "YOUR_GITHUB_USERNAME";
+    const repo = "YOUR_REPOSITORY_NAME";
+    const branch = "main";
+    const path = ""; // optional subfolder, e.g. "pages"
 
-<p class="text-gray-600 mb-10">
-Below are the sections of the plan. Click any section to open it.
-</p>
+    async function fetchRepoHtmlFiles(repoPath = "") {
+      const endpoint = `https://api.github.com/repos/${owner}/${repo}/contents/${repoPath}?ref=${branch}`;
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      const items = await response.json();
+      let htmlFiles = [];
 
-<div id="fileList" class="space-y-3"></div>
+      for (const item of items) {
+        if (item.type === "file" && item.name.endsWith(".html") && item.name.toLowerCase() !== "index.html") {
+          htmlFiles.push({
+            name: item.name,
+            path: item.path
+          });
+        } else if (item.type === "dir") {
+          const nested = await fetchRepoHtmlFiles(item.path);
+          htmlFiles = htmlFiles.concat(nested);
+        }
+      }
+      return htmlFiles;
+    }
 
-</div>
+    function labelFromFileName(fileName) {
+      return fileName
+        .replace(/\.html$/i, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
 
-<script>
+    function renderFiles(files) {
+      const status = document.getElementById("status");
+      const fileList = document.getElementById("fileList");
+      fileList.innerHTML = "";
 
-const owner = "YOUR_GITHUB_USERNAME";
-const repo = "YOUR_REPOSITORY_NAME";
-const path = "";
+      if (!files.length) {
+        status.textContent = "No HTML files found in this repository.";
+        return;
+      }
 
-async function loadFiles(){
+      status.textContent = `${files.length} HTML page${files.length === 1 ? "" : "s"} found.`;
 
-const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      files
+        .sort((a, b) => a.path.localeCompare(b.path))
+        .forEach(file => {
+          const link = document.createElement("a");
+          link.href = `./${file.path}`;
+          link.className = "block w-full rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 px-4 py-4 transition";
+          link.innerHTML = `
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <div class="font-medium text-slate-900">${labelFromFileName(file.name)}</div>
+                <div class="text-sm text-slate-500 mt-1">${file.path}</div>
+              </div>
+              <div class="text-sm font-medium text-slate-600">Open</div>
+            </div>
+          `;
+          fileList.appendChild(link);
+        });
+    }
 
-const response = await fetch(url);
-const files = await response.json();
+    async function loadFiles() {
+      const status = document.getElementById("status");
+      const fileList = document.getElementById("fileList");
+      status.textContent = "Loading HTML files…";
+      fileList.innerHTML = "";
 
-const container = document.getElementById("fileList");
+      try {
+        if (owner === "YOUR_GITHUB_USERNAME" || repo === "YOUR_REPOSITORY_NAME") {
+          status.innerHTML = "Update the <code>owner</code> and <code>repo</code> values in the script before using this on GitHub Pages.";
+          return;
+        }
+        const files = await fetchRepoHtmlFiles(path);
+        renderFiles(files);
+      } catch (error) {
+        status.textContent = "Unable to load repository files. Check the repository name, branch, and GitHub Pages setup.";
+        console.error(error);
+      }
+    }
 
-files
-.filter(file => file.name.endsWith(".html") && file.name !== "index.html")
-.forEach(file => {
-
-const button = document.createElement("button");
-
-button.className =
-"w-full text-left bg-white hover:bg-indigo-50 border border-gray-200 px-5 py-4 rounded-lg shadow-sm transition";
-
-button.innerHTML = `
-<span class="font-medium text-gray-900">${file.name.replace(".html","")}</span>
-`;
-
-button.onclick = () => {
-window.location.href = file.name;
-};
-
-container.appendChild(button);
-
-});
-
-}
-
-loadFiles();
-
-</script>
-
+    document.getElementById("refreshBtn").addEventListener("click", loadFiles);
+    loadFiles();
+  </script>
 </body>
 </html>
